@@ -23,17 +23,17 @@ class FileStorage:
             temp.update(FileStorage.__objects)
             for key, val in temp.items():
                 temp[key] = val.to_dict()
-            json.dump(temp, f)
+            json.dump(temp, f, indent=4)
 
     def reload(self):
         """Loads storage dictionary from file"""
-        from models.base_model import BaseModel
+        from models.city import City
         from models.user import User
         from models.place import Place
         from models.state import State
-        from models.city import City
-        from models.amenity import Amenity
         from models.review import Review
+        from models.amenity import Amenity
+        from models.base_model import BaseModel
 
         classes = {
                     'BaseModel': BaseModel, 'User': User, 'Place': Place,
