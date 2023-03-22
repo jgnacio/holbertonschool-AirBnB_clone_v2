@@ -1,14 +1,16 @@
 #!/usr/bin/python3
 """ Place Module for HBNB project """
 from models.base_model import BaseModel
+from sqlalchemy import Column, String, ForeingKey
 
 
 class Place(BaseModel):
     """ A place to stay """
-    city_id = ""
-    user_id = ""
-    name = ""
-    description = ""
+    __tablename__ = "places"
+    city_id = Column(String(60), nullable = False, ForeingKey("cities.id"))
+    user_id = Column(String(60), nullable = False, ForeingKey("users.id"))
+    name = Column(String(128), nullable = False)
+    description = Column((1024), nullable = False)
     number_rooms = 0
     number_bathrooms = 0
     max_guest = 0
