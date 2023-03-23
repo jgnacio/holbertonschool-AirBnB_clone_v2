@@ -123,21 +123,49 @@ class HBNBCommand(cmd.Cmd):
         split_args = args.split()
         class_to_create = split_args[0]
 
+        if class_to_create not in HBNBCommand.classes:
+            print("** class doesn't exist **")
+            return
+
+        new_instance = self.create_with_args(args, class_to_create)
+
+        print(new_instance.id)
+        storage.new(new_instance)
+        storage.save()
+
+    def create_with_args(self, args, class_to_create):
         # Regular expressions for verifying the argument
         arg_is_string = re.compile(r'.*=\".*\"')
         arg_is_float = re.compile(r'.*=-?\d*\.\d*')
         arg_is_integer = re.compile(r'.*=-?\d*')
 
-        if class_to_create not in HBNBCommand.classes:
-            print("** class doesn't exist **")
-            return
-
+        # Create the instance of the class
         new_instance = HBNBCommand.classes[class_to_create]()
 
+        # Separate args string in a list
+        split_args = args.split()
+        for arg in split_args[1:]:
+            # Get the key from the argument
+            arg_key = arg.split("=")[0]
+            # Get the value from the argument
+            arg_value = arg.split("=")[1]
 
-
-        print(new_instance.id)
-        storage.save()
+            if arg_is_float.match(arg):
+                new_instance.__dict__.update(
+                    {arg_key: float(arg_value.strip('"'))})
+            elif arg_is_string.match(arg):
+                arg_value = arg.split("=")[1][1:-1]
+                arg_value = arg_value.replace('"', '\"')
+                arg_value = arg_value.replace('_', ' ')
+                new_instance.__dict__.update({arg_key: arg_value})
+            elif arg_is_integer.match(arg):
+                try:
+                    new_instance.__dict__.update(
+                        {arg_key: int(arg_value.strip('"'))})
+                # If doesn't match, just ignore
+                except ValueError:
+                    pass
+        return new_instance
 
     def help_create(self):
         """ Help information for the create method """
@@ -212,21 +240,20 @@ class HBNBCommand(cmd.Cmd):
 
     def do_all(self, args):
         """ Shows all objects, or all objects of a class"""
-        print_list = []
+        list_obj = []
 
-        if args:
-            args = args.split(' ')[0]  # remove possible trailing args
-            if args not in HBNBCommand.classes:
+        if len(args) == 0:
+            for model in storage.all().values():
+                list_obj.append(str(model))
+        else:
+            if args.strip() in HBNBCommand.classes:
+                for name, model in storage.all().items():
+                    if name.split('.')[0] == args.strip():
+                        list_obj.append(str(model))
+            else:
                 print("** class doesn't exist **")
                 return
-            for k, v in storage.all(eval(args)).items():
-                if k.split('.')[0] == args:
-                    print_list.append(str(v))
-            print(storage.all(eval(args)))
-        else:
-            for k, v in storage.all().items():
-                print_list.append(str(v))
-            print(storage.all())
+        print(list_obj)
 
     def help_all(self):
         """ Help information for the all command """
