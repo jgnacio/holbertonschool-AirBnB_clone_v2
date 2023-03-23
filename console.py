@@ -247,7 +247,7 @@ class HBNBCommand(cmd.Cmd):
                 list_obj.append(str(model))
         else:
             if args.strip() in HBNBCommand.classes:
-                for name, model in storage.all().items():
+                for name, model in storage.all(eval(args)).items():
                     if name.split('.')[0] == args.strip():
                         list_obj.append(str(model))
             else:
