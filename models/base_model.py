@@ -33,7 +33,9 @@ class BaseModel:
     def __str__(self):
         """Returns a string representation of the instance"""
         cls = self.__class__.__name__
-        return f"[{cls}] ({self.id}) {self.__dict__}"
+        str_dict = self.__dict__
+        str_dict.pop('_sa_instance_state', None)
+        return f"[{cls}] ({self.id}) {str_dict}"
 
     def save(self):
         """Updates updated_at with current time when instance is changed"""
@@ -51,3 +53,8 @@ class BaseModel:
         dictionary['updated_at'] = self.updated_at.isoformat()
         dictionary.pop('_sa_instance_state', None)
         return dictionary
+
+    def delete(self):
+        """Delete the instance storage."""
+        from models import storage
+        storage.delete(self)
