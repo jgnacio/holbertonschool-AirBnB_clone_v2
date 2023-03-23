@@ -93,6 +93,40 @@ class HBNBCommand(cmd.Cmd):
             print('(hbnb) ', end='')
         return stop
 
+    def create_with_args(self, args, class_to_create):
+        # Regular expressions for verifying the argument
+        arg_is_string = re.compile(r'.*=\".*\"')
+        arg_is_float = re.compile(r'.*=-?\d*\.\d*')
+        arg_is_integer = re.compile(r'.*=-?\d*')
+
+        # Create the instance of the class
+        new_instance = HBNBCommand.classes[class_to_create]()
+
+        # Separate args string in a list
+        split_args = args.split()
+        for arg in split_args[1:]:
+            # Get the key from the argument
+            arg_key = arg.split("=")[0]
+            # Get the value from the argument
+            arg_value = arg.split("=")[1]
+
+            if arg_is_float.match(arg):
+                new_instance.__dict__.update(
+                    {arg_key: float(arg_value.strip('"'))})
+            elif arg_is_string.match(arg):
+                arg_value = arg.split("=")[1][1:-1]
+                arg_value = arg_value.replace('"', '\"')
+                arg_value = arg_value.replace('_', ' ')
+                new_instance.__dict__.update({arg_key: arg_value})
+            elif arg_is_integer.match(arg):
+                try:
+                    new_instance.__dict__.update(
+                        {arg_key: int(arg_value.strip('"'))})
+                # If doesn't match, just ignore
+                except ValueError:
+                    pass
+        return new_instance
+
     def do_quit(self, command):
         """ Method to exit the HBNB console"""
         exit()
@@ -132,40 +166,6 @@ class HBNBCommand(cmd.Cmd):
         print(new_instance.id)
         storage.new(new_instance)
         storage.save()
-
-    def create_with_args(self, args, class_to_create):
-        # Regular expressions for verifying the argument
-        arg_is_string = re.compile(r'.*=\".*\"')
-        arg_is_float = re.compile(r'.*=-?\d*\.\d*')
-        arg_is_integer = re.compile(r'.*=-?\d*')
-
-        # Create the instance of the class
-        new_instance = HBNBCommand.classes[class_to_create]()
-
-        # Separate args string in a list
-        split_args = args.split()
-        for arg in split_args[1:]:
-            # Get the key from the argument
-            arg_key = arg.split("=")[0]
-            # Get the value from the argument
-            arg_value = arg.split("=")[1]
-
-            if arg_is_float.match(arg):
-                new_instance.__dict__.update(
-                    {arg_key: float(arg_value.strip('"'))})
-            elif arg_is_string.match(arg):
-                arg_value = arg.split("=")[1][1:-1]
-                arg_value = arg_value.replace('"', '\"')
-                arg_value = arg_value.replace('_', ' ')
-                new_instance.__dict__.update({arg_key: arg_value})
-            elif arg_is_integer.match(arg):
-                try:
-                    new_instance.__dict__.update(
-                        {arg_key: int(arg_value.strip('"'))})
-                # If doesn't match, just ignore
-                except ValueError:
-                    pass
-        return new_instance
 
     def help_create(self):
         """ Help information for the create method """
@@ -241,14 +241,15 @@ class HBNBCommand(cmd.Cmd):
     def do_all(self, args):
         """ Shows all objects, or all objects of a class"""
         list_obj = []
+        args = args.strip()
 
         if len(args) == 0:
             for model in storage.all().values():
                 list_obj.append(str(model))
         else:
-            if args.strip() in HBNBCommand.classes:
-                for name, model in storage.all().items():
-                    if name.split('.')[0] == args.strip():
+            if args in HBNBCommand.classes:
+                for name, model in storage.all(eval(args)).items():
+                    if name.split('.')[0] == args:
                         list_obj.append(str(model))
             else:
                 print("** class doesn't exist **")
