@@ -26,3 +26,7 @@ class Place(BaseModel, Base):
     latitude = Column(Float)
     longitude = Column(Float)
     amenity_ids = []
+    amenities = relationship("Amenity", backref="user", cascade="delete")
+
+    if getenv("HBNB_TYPE_STORAGE") != "db":
+        pass
