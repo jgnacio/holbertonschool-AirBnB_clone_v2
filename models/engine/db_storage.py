@@ -5,7 +5,7 @@ from sqlalchemy import create_engine
 from sqlalchemy import Column
 from sqlalchemy.orm import sessionmaker, scoped_session
 from models.base_model import Base
-from . import classes
+from models import classes
 
 
 class DBStorage:
