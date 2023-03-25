@@ -59,7 +59,8 @@ class BaseModel:
         dictionary.pop('_sa_instance_state', None)
         return dictionary
 
-    def delete(self):
+    def delete(self, obj=None):
         """Delete the instance storage."""
         from models import storage
-        storage.delete(self)
+        if obj is not None:
+            storage.delete(self)
