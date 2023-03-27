@@ -28,6 +28,8 @@ Created on Mon Mar 27 11:13:00 2023.
         Display “Python ” followed by the value of the text variable.
         (replace underscore _ symbols with a space ).
 
+    (/number/<int:n>):
+        Display “n is a number” only if n is an integer.
 """
 from flask import Flask
 
@@ -69,7 +71,9 @@ def python(text):
 
 @app.route('/number/<int:n>', strict_slashes=False)
 def number(n):
-    return f"{n}"
+    """Display “n is a number” only if n is an integer."""
+    return f"{n} is a number"
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
