@@ -22,18 +22,25 @@ class DBStorage:
 
     def all(self, cls=None):
         """Returns all instances of the given class."""
-        if cls:
-            if type(cls) == str:
-                cls = eval(cls)
-            objs = self.__session.query(cls)
+        from models.base_model import BaseModel
+
+        new_dict = {}
+
+        if cls is None:
+            for class_name in classes.values():
+                if class_name != classes["BaseModel"]:
+                    for obj in self.__session.query(class_name).all():
+                        new_dict["{}.{}".format(
+                            obj.__class__.__name__,
+                            obj.id
+                        )] = obj
         else:
-            objs = self.__session.query(classes['State']).all()
-            objs.extend(self.__session.query(classes['City']).all())
-            objs.extend(self.__session.query(classes['User']).all())
-            objs.extend(self.__session.query(classes['Place']).all())
-            objs.extend(self.__session.query(classes['Review']).all())
-            objs.extend(self.__session.query(classes['Amenity']).all())
-        return {"{}.{}".format(type(o).__name__, o.id): o for o in objs}
+            for obj in self.__session.query(cls).all():
+                new_dict["{}.{}".format(
+                    obj.__class__.__name__,
+                    obj.id
+                )] = obj
+        return new_dict
 
     def delete(self, obj=None):
         """Delete a given object."""
