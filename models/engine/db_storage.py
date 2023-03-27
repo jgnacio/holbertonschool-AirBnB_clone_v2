@@ -67,9 +67,9 @@ class DBStorage:
         from models.review import Review
         from models.amenity import Amenity
         Base.metadata.create_all(self.__engine)
-        self.__session = scoped_session(
-            sessionmaker(self.__engine, expire_on_commit=False)
-        )
+        mkrsession = sessionmaker(self.__engine, expire_on_commit=False)
+        Session = scoped_session(mkrsession)
+        self.__session = Session()
 
     def close(self):
         self.__session.close()
