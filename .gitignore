@@ -4,3 +4,4 @@ file.json
 devcontainer.json
 test_*
 tmp_*
+venv
