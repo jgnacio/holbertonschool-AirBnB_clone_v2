@@ -43,7 +43,7 @@ def hbnb():
 def c(text):
     """
     Display “C ” followed by the value of the text variable.
-    
+
     (replace underscore _ symbols with a space ).
     """
     return "C_{}".format(text).replace("_", " ")
@@ -53,7 +53,7 @@ def c(text):
 def python(text="is cool"):
     """
     Display “Python ” followed by the value of the text variable.
-    
+
     (replace underscore _ symbols with a space ).
     """
     return "Python_{}".format(text).replace("_", " ")
