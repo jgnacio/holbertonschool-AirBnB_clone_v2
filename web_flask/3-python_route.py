@@ -53,7 +53,7 @@ def c(text):
 
     (replace underscore _ symbols with a space ).
     """
-    return f'C_{text}'.replace("_", " ")
+    return "C_{}".format(text).replace("_", " ")
 
 
 @app.route('/python', defaults={'text': "is_cool"}, strict_slashes=False)
@@ -64,7 +64,7 @@ def python(text):
 
     (replace underscore _ symbols with a space ).
     """
-    return f'Python_{text}'.replace("_", " ")
+    return "Python_{}".format(text).replace("_", " ")
 
 
 if __name__ == '__main__':

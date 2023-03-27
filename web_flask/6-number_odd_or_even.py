@@ -59,7 +59,7 @@ def c(text):
 
     (replace underscore _ symbols with a space ).
     """
-    return f'C_{text}'.replace("_", " ")
+    return "C_{}".format(text).replace("_", " ")
 
 
 @app.route('/python', defaults={'text': "is_cool"}, strict_slashes=False)
@@ -70,13 +70,13 @@ def python(text):
 
     (replace underscore _ symbols with a space ).
     """
-    return f'Python_{text}'.replace("_", " ")
+    return "Python_{}".format(text).replace("_", " ")
 
 
 @app.route('/number/<int:n>', strict_slashes=False)
 def number(n):
     """Display “n is a number” only if n is an integer."""
-    return f"{n} is a number"
+    return "{} is a number".format(n)
 
 
 @app.route('/number_template/<int:n>', strict_slashes=False)
