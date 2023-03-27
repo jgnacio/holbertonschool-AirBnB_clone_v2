@@ -20,7 +20,7 @@ class State(BaseModel, Base):
             """Return all cities linked to this relationship."""
             from models import storage
             my_list=[]
-            for i in storage.all(City):
+            for i in list(storage.all(City).values()):
                 if self.id == i.state_id:
                     my_list.append(i)
             return my_list
