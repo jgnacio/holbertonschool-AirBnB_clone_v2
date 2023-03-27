@@ -61,3 +61,6 @@ class DBStorage:
         from models.amenity import Amenity
         Base.metadata.create_all(self.__engine)
         self.__session = scoped_session(sessionmaker(self.__engine, expire_on_commit=False))
+
+    def close(self):
+        self.__session.remove()
