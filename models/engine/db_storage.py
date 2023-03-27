@@ -34,10 +34,16 @@ class DBStorage:
             for class_name in classes.values():
                 if class_name != classes["BaseModel"]:
                     for obj in self.__session.query(class_name).all():
-                        new_dict[f"{obj.__class__.__name__}.{obj.id}"] = obj
+                        new_dict["{}.{}".format(
+                            obj.__class__.__name__,
+                            obj.id
+                        )] = obj
         else:
             for obj in self.__session.query(cls).all():
-                new_dict[f"{obj.__class__.__name__}.{obj.id}"] = obj
+                new_dict["{}.{}".format(
+                    obj.__class__.__name__,
+                    obj.id
+                )] = obj
         return new_dict
 
     def delete(self, obj=None):
