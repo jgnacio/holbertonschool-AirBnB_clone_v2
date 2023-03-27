@@ -20,10 +20,6 @@ class DBStorage:
             getenv("HBNB_MYSQL_DB")
         ), pool_pre_ping=True)
 
-        Base.metadata.create_all(self.__engine)
-        Session = sessionmaker(bind=self.__engine)
-        self.__session = Session()
-
     def all(self, cls=None):
         """Returns all instances of the given class."""
         from models.base_model import BaseModel
