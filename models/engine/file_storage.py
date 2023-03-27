@@ -3,6 +3,7 @@
 import json
 from models import classes
 
+
 class FileStorage:
     """This class manages storage of hbnb models in JSON format"""
     __file_path = 'file.json'
@@ -30,7 +31,9 @@ class FileStorage:
         if obj is None:
             return
         # Delete obj from dictionary
-        self.__objects.pop(obj.__class__.__name__ + "." + obj.__dict__["id"], None)
+        self.__objects.pop(
+            obj.__class__.__name__ + "." + obj.__dict__["id"], None
+        )
         self.save()
 
     def save(self):

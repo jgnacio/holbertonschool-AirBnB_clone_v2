@@ -13,9 +13,10 @@ class DBStorage:
     __session = None
 
     def __init__(self):
-        self.__engine = create_engine("mysql+mysqldb://{}:{}@localhost/{}".format(
+        self.__engine = create_engine("mysql+mysqldb://{}:{}@{}/{}".format(
             getenv("HBNB_MYSQL_USER"),
             getenv("HBNB_MYSQL_PWD"),
+            getenv("HBNB_MYSQL_HOST"),
             getenv("HBNB_MYSQL_DB")
         ), pool_pre_ping=True)
 
@@ -60,7 +61,9 @@ class DBStorage:
         from models.review import Review
         from models.amenity import Amenity
         Base.metadata.create_all(self.__engine)
-        self.__session = scoped_session(sessionmaker(self.__engine, expire_on_commit=False))
+        self.__session = scoped_session(
+            sessionmaker(self.__engine, expire_on_commit=False)
+        )
 
     def close(self):
         self.__session.remove()
