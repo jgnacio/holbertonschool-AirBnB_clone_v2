@@ -43,7 +43,6 @@ class Place(BaseModel, Base):
         amenities = relationship(
             "Amenity",
             secondary="place_amenity",
-            overlaps="place_amenities",
             viewonly=False
         )
     else:
