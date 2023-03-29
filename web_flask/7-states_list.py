@@ -24,7 +24,8 @@ def shutdown_session(exception=None):
 @app.route('/states_list', strict_slashes=False)
 def states_list():
     """Display all states with the id and the name."""
-    return render_template('7-states_list.html', states=storage.all(State).values())
+    new_dict = dict(sorted(storage.all(State).items(), key=lambda item: item[1].name))
+    return render_template('7-states_list.html', states=new_dict.values())
 
 
 if __name__ == '__main__':
