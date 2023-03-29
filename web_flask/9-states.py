@@ -45,7 +45,7 @@ def list_states_by_id(id):
     for state in new_dict.values():
         if state.id == id:
             return render_template('9-states.html', state=state)
-    return "Not found!"
+    return "<h1>Not found!<h1/>"
 
 
 if __name__ == '__main__':
